@@ -1,0 +1,557 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EXE Sender</title>
+  <link rel="icon" href="https://logo.clearbit.com/sent.com" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2980b9;
+      --success-color: #2ecc71;
+      --danger-color: #e74c3c;
+      --light-color: #f8f9fa;
+      --dark-color: #343a40;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    
+    .logo h1 {
+      font-size: 24px;
+      color: var(--primary-color);
+    }
+    
+    .theme-switch {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .theme-btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: var(--light-color);
+      transition: all 0.3s ease;
+    }
+    
+    .theme-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .card-title {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: var(--dark-color);
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--secondary-color);
+    }
+    
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    
+    .html-preview {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+      background-color: white;
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 10px;
+      border-radius: 4px;
+      flex: 1;
+      margin: 0 5px;
+    }
+    
+    .stat-item.success {
+      background-color: rgba(46, 204, 113, 0.2);
+      color: var(--success-color);
+    }
+    
+    .stat-item.danger {
+      background-color: rgba(231, 76, 60, 0.2);
+      color: var(--danger-color);
+    }
+    
+    .stat-item.info {
+      background-color: rgba(52, 152, 219, 0.2);
+      color: var(--primary-color);
+    }
+    
+    .log-container {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      margin-top: 10px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    
+    .log-success {
+      color: var(--success-color);
+    }
+    
+    .log-error {
+      color: var(--danger-color);
+    }
+    
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      flex-direction: column;
+      color: white;
+    }
+    
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid white;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #252525;
+      color: #f0f0f0;
+    }
+    
+    body.dark-mode .card {
+      background-color: #333;
+      color: #f0f0f0;
+    }
+    
+    body.dark-mode input, 
+    body.dark-mode textarea, 
+    body.dark-mode select {
+      background-color: #444;
+      color: #f0f0f0;
+      border-color: #555;
+    }
+    
+    body.dark-mode .html-preview {
+      background-color: #444;
+      color: #f0f0f0;
+    }
+    
+    body.dark-mode .card-title {
+      color: #f0f0f0;
+      border-bottom-color: #444;
+    }
+    
+    body.dark-mode .theme-btn {
+      background-color: #444;
+      color: #f0f0f0;
+    }
+    
+    /* Modern Layout Styles */
+    body.modern-layout .card {
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    body.modern-layout button {
+      border-radius: 30px;
+    }
+    
+    body.modern-layout input,
+    body.modern-layout textarea,
+    body.modern-layout select {
+      border-radius: 8px;
+    }
+    
+    /* Compact Layout Styles */
+    body.compact-layout .form-group {
+      margin-bottom: 8px;
+    }
+    
+    body.compact-layout .card {
+      padding: 12px;
+    }
+    
+    body.compact-layout input,
+    body.compact-layout textarea,
+    body.compact-layout select {
+      padding: 6px;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    /* File Upload Button Styling */
+    .file-upload {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    .file-upload-btn {
+      display: block;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      color: #333;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+      cursor: pointer;
+      width: 100%;
+    }
+    
+    .file-upload input[type=file] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .file-name {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .tab {
+      padding: 10px 15px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .tab.active {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="loading-overlay hidden" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p>Preparing to send emails...</p>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <img src="images/icon.jpeg" alt="Email Sender Logo" id="logoImg">
+        <h1>EXE</h1>
+      </div>
+      <div class="theme-switch">
+        <button class="theme-btn active" data-layout="default">Default</button>
+        <button class="theme-btn" data-layout="modern-layout">Modern</button>
+        <button class="theme-btn" data-layout="compact-layout">Compact</button>
+        <button class="theme-btn" data-theme="light"><i class="fas fa-sun"></i></button>
+        <button class="theme-btn" data-theme="dark"><i class="fas fa-moon"></i></button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="left-column">
+        <div class="card">
+          <h2 class="card-title">Email Composition</h2>
+          
+          <div class="tabs">
+            <div class="tab active" data-tab="basic">Basic</div>
+            <div class="tab" data-tab="recipients">Recipients</div>
+            <div class="tab" data-tab="smtp">SMTP Settings</div>
+          </div>
+          
+          <div class="tab-content active" data-tab-content="basic">
+            <div class="form-group">
+              <label for="sender-name">Sender Name</label>
+              <input type="text" id="sender-name" placeholder="Your Name">
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" placeholder="Email Subject">
+            </div>
+            
+            <div class="form-group">
+              <label for="email-content">Email Content (HTML Supported)</label>
+              <textarea id="email-content" rows="10" placeholder="Write your email content here. HTML is supported. Use {Email} and {Domain} as variables."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="attachments">Attachments</label>
+              <div class="file-upload">
+                <label class="file-upload-btn" for="attachment-input">Choose Files</label>
+                <input type="file" id="attachment-input" multiple>
+              </div>
+              <div class="file-name" id="attachment-list">No files selected</div>
+            </div>
+            
+            <div class="form-group">
+              <button class="btn-primary" id="preview-btn">Preview HTML</button>
+              <div class="html-preview" id="html-preview"></div>
+            </div>
+          </div>
+          
+          <div class="tab-content" data-tab-content="recipients">
+            <div class="form-group">
+              <label for="recipient-input">Enter Recipients (one email per line)</label>
+              <textarea id="recipient-input" rows="10" placeholder="email1@example.com&#10;email2@example.com"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="recipient-file">Or Upload Recipient List</label>
+              <div class="file-upload">
+                <label class="file-upload-btn" for="recipient-file-input">Choose File</label>
+                <input type="file" id="recipient-file-input" accept=".txt,.csv">
+              </div>
+              <div class="file-name" id="recipient-file-name">No file selected</div>
+            </div>
+          </div>
+          
+          <div class="tab-content" data-tab-content="smtp">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="smtp-host">SMTP Host</label>
+                <input type="text" id="smtp-host" placeholder="smtp.example.com">
+              </div>
+              
+              <div class="form-group">
+                <label for="smtp-port">SMTP Port</label>
+                <select id="smtp-port">
+                  <option value="25">25</option>
+                  <option value="465" selected>465</option>
+                  <option value="587">587</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="smtp-user">SMTP Username</label>
+              <input type="text" id="smtp-user" placeholder="username@example.com">
+            </div>
+            
+            <div class="form-group">
+              <label for="smtp-pass">SMTP Password</label>
+              <input type="password" id="smtp-pass" placeholder="Password">
+            </div>
+            
+            <div class="form-group">
+              <label for="smtp-delay">Delay Between Emails (seconds)</label>
+              <input type="number" id="smtp-delay" value="3" min="1">
+            </div>
+            
+            <div class="form-group">
+              <button class="btn-primary" id="test-smtp-btn">Test SMTP Connection</button>
+            </div>
+            
+            <div class="form-group">
+              <label for="smtp-rotation">SMTP Rotation</label>
+              <textarea id="smtp-rotation" rows="5" placeholder="host1,user1,pass1,port1&#10;host2,user2,pass2,port2"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Actions</h2>
+          <div class="form-group">
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-primary" id="send-btn" style="flex: 2;"><i class="fas fa-paper-plane"></i> Send Emails</button>
+              <button class="btn-danger hidden" id="pause-btn" style="flex: 1;"><i class="fas fa-pause"></i> Pause</button>
+              <button class="btn-danger hidden" id="cancel-btn" style="flex: 1;"><i class="fas fa-times"></i> Cancel</button>
+              <button class="btn-primary" id="reset-btn" style="flex: 1;"><i class="fas fa-redo"></i> Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <div class="card">
+          <h2 class="card-title">Statistics</h2>
+          <div class="stats">
+            <div class="stat-item info">
+              <h3>Total</h3>
+              <p id="total-count">0</p>
+            </div>
+            <div class="stat-item success">
+              <h3>Sent</h3>
+              <p id="sent-count">0</p>
+            </div>
+            <div class="stat-item danger">
+              <h3>Failed</h3>
+              <p id="failed-count">0</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Logs</h2>
+          <div class="log-container" id="log-container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

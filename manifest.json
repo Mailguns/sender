@@ -1,0 +1,57 @@
+
+{
+  "name": "EXE Sender",
+  "short_name": "EXE",
+  "description": "Send bulk emails with HTML support and variable tags",
+  "id": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3498db",
+  "orientation": "any",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "images/icon.jpeg",
+      "sizes": "128x128",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "images/icon.jpeg",
+      "sizes": "144x144",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/icon.jpeg",
+      "sizes": "320x568",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "images/icon.jpeg",
+      "sizes": "1024x768",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Send Emails",
+      "url": "/?action=send",
+      "description": "Start sending emails",
+      "icons": [
+        {
+          "src": "images/icon.jpeg",
+          "sizes": "96x96",
+          "type": "image/jpeg"
+        }
+      ]
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "prefer_related_applications": false
+}
